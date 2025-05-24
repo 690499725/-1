@@ -8,7 +8,7 @@
           <p>基于 VR +AI 的智慧养老院数字孪生平台：智能监控与健康管理一体化系</p>
         </div>
         <div class="register-image">
-          <img src="../assets/login.png" alt="register background">
+          <img src="/image/login.png" alt="register background">
         </div>
       </div>
       <div class="register-right">
