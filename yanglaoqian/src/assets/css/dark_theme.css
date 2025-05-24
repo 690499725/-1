@@ -1,0 +1,405 @@
+@charset "utf-8";
+
+.dark {
+	background: linear-gradient(to bottom,#003366,#222);
+	color: #fff;
+}
+
+.dark .title {
+	text-align: center;
+	color: #fff;
+	font-size: 2.4rem;
+}
+
+.dark .title {
+	height: 6vh;
+	position: relative;
+	border-bottom: 0.2vh solid #021024;
+}
+
+.dark .title .time_div {
+	line-height: 6vh;
+	height: 6vh;
+	width: 7vw;
+	margin-right: 0.5vw;
+}
+
+.dark .title .time {
+	font-size: 1.4rem;
+	text-align: right;
+	line-height: 2vh;
+	text-align: center;
+	padding-top: 1vh;
+}
+
+.dark .title .time .time_text{
+	font-size: 2.2rem;
+	color: #fac400;
+	letter-spacing: 0.625rem;
+}
+.dark .title .time .date_text{
+	font-size: 1.2rem;
+	color: #fff;
+	line-height: 3vh;
+}
+
+.dark .title .weather_div{
+	line-height: 6vh;
+	height: 6vh;
+	width: 8vw;
+	margin-right: 0.5vw;
+}
+.dark .title .weather_div .icon{
+	font-size: 3rem;
+	color: #fac400;
+}
+.dark .title .weather_div .temptext{
+	font-size: 1.4rem;
+	line-height: 2vh;
+	padding-top: 1vh;
+}
+.dark .title .weather_div .weathertext{
+	font-size: 1.4rem;
+	line-height: 2vh;
+	text-align: center;
+}
+
+.dark .title .header {
+	letter-spacing: 0.3vh;
+	background: #c1e8ff;
+  background-clip: text;
+	color: transparent;
+	text-align: left;
+	padding: 1vh;
+}
+
+.dark .title .menus {
+	display: flex;
+	height: 6vh;
+	padding-right: 1vh;
+}
+.dark .title .menus_div {
+	height: 6vh;
+	width: 25vw;
+}
+.dark .title .menus .menu_item {
+	height: 3vh;
+	line-height: 3vh;
+	font-size: 1.4rem;
+	margin: 0 auto;
+	width: 90%;
+	background: rgba(255, 255, 255, 0.3);
+	border-radius: 3px;
+	margin-top: 1.5vh;
+	cursor: pointer;
+}
+
+.dark .title .menus .menu_item:hover {
+	background: #5483B3;
+}
+
+.dark .title .tools {
+	height: 6vh;
+	line-height: 6vh;
+}
+
+.dark .title .tool_item {
+	font-size: 1.4rem;
+	cursor: pointer;
+	line-height: 2vh;
+	text-align: center;
+	padding-top: 0.2vh;
+}
+
+.dark .title .tool_item i {
+	height: 3vh;
+	line-height: 3vh;
+	font-size: 1.8rem;
+}
+
+.dark .title .tool_item:hover {
+	color: #fac400;
+}
+
+
+
+.dark .setting_panel .setting_panel_maker {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 999;
+}
+
+.dark .setting_panel .inner_contaner {
+	position: fixed;
+	background: #fac40061;
+	border-radius: 0.5vh;
+	z-index: 2;
+	box-shadow: 0 0.2vw 1vh 0 rgba(0, 0, 0, 0.1);
+}
+
+.dark .setting_panel .inner_contaner .settingPanelCloseBtn {
+	position: absolute;
+	right: -1vh;
+	top: -1vh;
+	cursor: pointer;
+}
+
+.dark .setting_panel .inner_contaner .settingPanelCloseBtn:hover {
+	color: #fac400;
+}
+
+.dark .setting_panel .inner_contaner .setting_panel_title {
+	height: 6vh;;
+	line-height: 6vh;;
+	text-align: center;
+	font-size: 2rem;
+}
+
+.dark .setting_panel .inner_contaner .settingForm {
+	padding-right: 7vw;
+}
+
+.dark .setting_panel .inner_contaner .settingForm .el-form-item__label {
+	color: #fff;
+}
+
+
+.dark .chart {
+	border: 0.1vh solid #C1E8FF;
+	position: relative;
+	padding: 0 1vh;
+}
+
+.dark .chart .chart_title {
+	font-size: 1.6rem;
+	font-weight: bold;
+	line-height: 4vh;
+	height: 4vh;
+	background: #7da0ca;
+	background-clip: text;
+	color: transparent;
+}
+
+.dark .chart .border_line {
+	position: absolute;
+	background: #fff;
+}
+
+.dark .chart .topleft1 {
+	top: 0;
+	left: 0;
+	width: 0.8vw;
+	height: 0.1vh;
+}
+
+.dark .chart .topleft2 {
+	top: 0.8vh;
+	left: -0.4vw;
+	width: 0.8vw;
+	height: 0.2vh;
+	transform: rotate(90deg);
+}
+
+.dark .chart .topright1 {
+	top: 0;
+	right: 0;
+	width: 0.8vw;
+	height: 0.1vh;
+}
+
+.dark .chart .topright2 {
+	top: 0.8vh;
+	right: -0.4vw;
+	width: 0.8vw;
+	height: 0.2vh;
+	transform: rotate(90deg);
+}
+
+.dark .chart .bottomleft1 {
+	bottom: -0.1vh;
+	left: -0.1vh;
+	width: 0.8vw;
+	height: 0.1vh;
+}
+
+.dark .chart .bottomleft2 {
+	bottom: 0.6vh;
+	left: -0.4vw;
+	width: 0.8vw;
+	height: 0.2vh;
+	transform: rotate(90deg);
+}
+
+.dark .chart .bottomright1 {
+	bottom: -0.1vh;
+	right: 0;
+	width: 0.8vw;
+	height: 0.1vh;
+}
+
+.dark .chart .bottomright2 {
+	bottom: 0.6vh;
+	right: -0.4vw;
+	width: 0.8vw;
+	height: 0.2vh;
+	transform: rotate(90deg);
+}
+
+
+
+.dark .chart .tr .th {
+	text-align: center;
+	font-size: 1.4rem;
+	height: 3vh;
+	line-height: 3vh;
+	text-align: center;
+}
+
+.dark .chart .tr .th .text {
+	background-color: #fac400aa;
+}
+
+.dark .chart .tr .td {
+	text-align: center;
+	font-size: 1.4rem;
+	height: 3vh;
+	line-height: 3vh;
+	text-align: center;
+}
+
+.dark .chart .tr.bg {
+	background: #01AAED22;
+}
+
+
+.dark .split_line_h {
+	width: 0.1vw;
+	height: 6vh;
+	background: linear-gradient(to bottom, #00000000, #7DA0CA, #00000000);
+}
+
+.dark .split_line_w {
+	width: 100%;
+	height: 0.1vw;
+	margin-top: 1vh;
+	background: linear-gradient(to right, #00000000, #d3a707, #00000000);
+}
+
+/* 输入框样式优化 */
+.dark .el-input__wrapper {
+	background-color: rgba(255, 255, 255, 0.15) !important;
+	box-shadow: 0 0 0 1px rgba(250, 196, 0, 0.3) inset !important;
+	border-radius: 4px;
+	transition: all 0.3s ease;
+}
+
+.dark .el-input__wrapper:hover {
+	background-color: rgba(255, 255, 255, 0.2) !important;
+	box-shadow: 0 0 0 1px rgba(250, 196, 0, 0.5) inset !important;
+}
+
+.dark .el-input__wrapper.is-focus {
+	background-color: rgba(250, 196, 0, 0.1) !important;
+	box-shadow: 0 0 0 1px #fac400 inset !important;
+}
+
+.dark .el-input__inner {
+	color: #fff !important;
+	font-weight: bold;
+}
+
+.dark .el-input__inner::placeholder {
+	color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* 文本域样式 */
+.dark .el-textarea__inner {
+	background-color: rgba(255, 255, 255, 0.15) !important;
+	border-color: rgba(250, 196, 0, 0.3) !important;
+	color: #fff !important;
+	border-radius: 4px;
+	transition: all 0.3s ease;
+}
+
+.dark .el-textarea__inner:hover {
+	background-color: rgba(255, 255, 255, 0.2) !important;
+	border-color: rgba(250, 196, 0, 0.5) !important;
+}
+
+.dark .el-textarea__inner:focus {
+	background-color: rgba(250, 196, 0, 0.1) !important;
+	border-color: #fac400 !important;
+	box-shadow: 0 0 10px rgba(250, 196, 0, 0.5) !important;
+}
+
+.dark .el-textarea__inner::placeholder {
+	color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* 选择框样式 */
+.dark .el-select .el-input__wrapper {
+	background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.dark .el-select-dropdown {
+	background-color: #1a1a1a !important;
+	border: 1px solid rgba(255, 255, 255, 0.2) !important;
+	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8) !important;
+}
+
+.dark .el-select-dropdown__item {
+	color: #eee !important;
+}
+
+.dark .el-select-dropdown__item.hover,
+.dark .el-select-dropdown__item:hover {
+	background-color: rgba(250, 196, 0, 0.1) !important;
+	color: #fac400 !important;
+}
+
+.dark .el-select-dropdown__item.selected {
+	background-color: rgba(250, 196, 0, 0.2) !important;
+	color: #fac400 !important;
+}
+
+/* 表单标签样式 */
+.dark .el-form-item__label {
+	color: #eee !important;
+}
+
+/* 按钮样式优化 */
+.dark .el-button {
+	transition: all 0.3s ease !important;
+}
+
+.dark .el-button:hover {
+	transform: translateY(-2px) !important;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+.dark .el-button--primary {
+	background: #5483B3;
+	border: none !important;
+}
+
+.dark .el-button--primary:hover {
+	background: #5483B3;
+}
+
+.dark .el-button--danger {
+	background: linear-gradient(45deg, #f56c6c, #c53030) !important;
+	border: none !important;
+}
+
+.dark .el-button--success {
+	background: linear-gradient(45deg, #67c23a, #4e9e2e) !important;
+	border: none !important;
+}
+
+.dark .el-button--warning {
+	background: linear-gradient(45deg, #e6a23c, #c67d1e) !important;
+	border: none !important;
+}

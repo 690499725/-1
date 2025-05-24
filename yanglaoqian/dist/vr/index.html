@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>养老院</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit" />
+    <meta name="keywords" content="养老院,建E网全景图,360全景图免费合成,全景短视频,VR全景,VR看房,手机合成全景,室内设计全景作品,家装全景,8K全景相机,全景图拍摄" />
+    <meta name="description" content="养老院  建E全景是一款免费的VR全景在线合成软件；360°沉浸式虚拟现实展示，支持电脑及手机端操作，轻松合成全景效果图、实拍图；提供作品展示、方案汇报等不同形式的一站式解决方案，30万+设计师都在用的签单工具。" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <script type="text/javascript" src="other/jquery.min.js"></script>
+    <script type="text/javascript" src="other/touch.min.js"></script>
+    <script type="text/javascript" src="other/cat.touchjs.js"></script>
+    <script type="text/javascript" src="other/tour_21.js"></script>
+    <script type="text/javascript" src="other/art-template-web.js"></script>
+    <script type="text/javascript" src="other/swiper4.0.5.min.js"></script>
+    <script type="text/javascript" src="other/flexible.js"></script>
+    <script type="text/javascript" src="other/iscroll2.js"></script>
+    <script type="text/javascript" src="other/navbarscroll.js"></script>
+    <link rel="stylesheet" type="text/css" href="other/swiper.min.css">
+    <link rel="stylesheet" type="text/css" href="other/vr-preview.css">
+    <link rel="stylesheet" type="text/css" href="other/vr-preview-son.css">
+
+    <style>
+        #loadingImg .h5_img {
+            max-width:100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #loadingImg .pc_img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #loadingImg .h5_video {
+            max-width:100%;
+            width: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #loadingImg .pc_video {
+            width: 80%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div id="bodyclass" style="width: 100%;height: 100%;z-index: 1900;position: absolute;display: none;">
+    <div id="passWordWarp"></div>
+    <div id="loading">
+        <div id="loadingImg" style="width:100%;height: 100%;display: flex;justify-content: center;align-items: center;">
+        </div>
+    </div>
+    <div class="time-start" style="cursor:pointer;" onclick="clearTimeout(timeClock);startPano();">
+        <span class="time" id="time"></span>
+        <span class="time_text">s自动进入全景或点击直接进入</span>
+    </div>
+</div>
+
+<audio id="mp3" src="other/20210929142341_6154066d37c90.mp3" loop="loop" style="display: none;"></audio>
+<div id="pano" style="width:100%;height:100%;">
+    <noscript>
+        <table style="width:100%;height:100%;">
+            <tr style="vertical-align:middle;">
+                <td>
+                    <div style="text-align:center;">ERROR:<br />
+                        <br />Javascript not activated<br /><br />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </noscript>
+</div>
+
+<script>
+    var PANOID = "35273244";
+    var uid = parseInt("3873052");
+    var has_expired = parseInt("0");
+    var versions = "";
+    var music = parseInt("1");
+    var xml = "other/tour.xml";
+    var krpano;
+    var bodyclass = "";
+    var sendboxopen = "";
+    var lat = "";
+    var lng = "";
+    var shareUrl = "";
+    var bodyBackgroundColor = "";
+    var advertStatus = parseInt("0");
+    /* 全景是否开启分组模式 */
+    var vr_model_group = parseInt("2");
+    var galleryThumbs, galleryTop, tag_index = 0, json_List;
+    /*是否展示场景*/
+    var pano_setting_showthumbs = "false";
+    var wx_share_desc = '';
+    var wx_share_imgUrl = '';
+    var wx_share_title = '';
+    var vr_site_vrimg = "";
+    var vr_site_url = "";
+    var vr_adv_url = "";
+    var vr_site_res1_url = "";
+    var vr_water_origin = "";
+    var vr_is_vip = "1";
+    var _SessionStoragejson;
+    var _sandBoxisLanguage = 1;
+    var _sandTargetToSandid = [];
+    var _sandTargetToSandList = [];
+    var _sandTargetToSandInfoList = [];
+    var audioHotSpotActiveId = 0;
+    var intro = "设计说明";
+    var last_update_time = "1744863488";
+    var open_advert_pc = "";
+    var open_advert_h5 = "";
+    var is_mobile = IsPC()?0:1;
+    var vr_view_num = 0;
+    var isbigscreen = 0;
+    var app_referer = 0;
+    var vr_isWxAndroid = 0;
+    if (navigator.userAgent.indexOf('Android') > -1) {
+        vr_isWxAndroid = 1;
+    }
+    /*判断是否是电脑端访问*/
+    function IsPC() {
+        var userAgentInfo = navigator.userAgent;
+        var Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"];
+        var flag = true;
+        for (var v = 0; v < Agents.length; v++) {
+            if (userAgentInfo.indexOf(Agents[v]) > 0) {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    }
+
+    var advert_type = "1";
+    var open_advert_text = "";
+    var open_advert_text_color = "";
+    var open_advert_color = "";
+
+</script>
+
+<div class="pano-revision-moblie none-revision" id="panoMoblie" style="display: none;">
+    
+    <div class="left-moblie">
+        
+        
+                <a class="item" href="tel:15926529637">
+            <i class="item-icon" style="background-image: url('other/skin/tel-moblie.png')"></i>
+            <span class="item-title item-scroll">
+                    <i class="item-scroll-1">电话</i>
+                    <i class="item-scroll-2">电话</i>
+                </span>
+        </a>
+        
+            </div>
+
+    <div class="right-moblie">
+        
+    </div>
+</div>
+
+<ul class="pano-wrapper pano-revision" id='pano-wrapper'>
+    <li style="width: 1px;height: 50px;"></li>
+
+    
+    <li class="mobile">
+            <div class="none tel" style="bottom: 100px">
+                15926529637            </div>
+            <a href="javascript:;">
+                <p class="icon-revision-warp">
+                        <span class="icon-revision">
+                            <i style="background-image: url('other/skin/tel.png');"></i>
+                        </span>
+                </p>
+            </a>
+                            <div class="iconname iconname-scroll">
+                    <i class="item-scroll-common" style="padding: 0;">电话</i>
+                </div>        </li>
+    
+    
+    
+
+    <li class="vr-preview-icon-right">
+        
+    </li>
+
+</ul>
+
+
+
+<!-- 材质查看 -->
+<script type="text/html" id="material-view">
+    <div class="material-view">
+        <button class="m-back" onclick="joinscene('{{id}}')">返回主场景</button>
+        <div class="cont clearfix">
+            {{each list value}}
+            <div class="item fl" style="cursor:pointer;" onclick="joinscene('{{value.id}}')">
+                <div class="pic">
+                    <img src="other/{{value.pic}}">
+                </div>
+                <p class="txt ellipsis">{{value.name}}</p>
+                <i class="icon icon-now-material {{value.active}}"></i>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</script>
+
+<script>
+    $(function () {
+        if (app_referer == 2) {
+            if (is_mobile > 0) {
+                $('#btn_like').remove();
+            } else {
+                $('#btn_like').parent().remove();
+            }
+        }
+        let value = null;
+        if (advert_type == 3) {
+            value = open_advert_text;
+        } else {
+            if (is_mobile > 0) {
+                value = open_advert_h5;
+            } else {
+                value = open_advert_pc;
+            }
+        }
+        showAdvert(value, is_mobile > 0 ? 'h5' : 'pc');
+    });
+
+    function showAdvert(value,type) {
+
+        let target;
+        if(advert_type == 1){
+            target = document.createElement('img');
+            target.setAttribute('class', type + '_img');
+            target.setAttribute('src', value);
+        }else if(advert_type == 2){
+            $('.time-start .time_text').text('点击进入全景作品');
+            $('.time-start .time').hide();
+            target = document.createElement('video');
+            target.setAttribute('controls', 'controls');
+            target.setAttribute('class', type + '_video');
+            target.setAttribute('src', value);
+            target.muted = true;
+            target.setAttribute('autoplay', 'autoplay');
+            target.setAttribute('loop', 'loop');
+            target.play();
+        }else if(advert_type == 3){
+            target = document.createElement('div');
+            target.innerHTML = `
+            <div style="display: flex;align-items: center;justify-content: center;height: 100%;">
+              <div class="text-center">
+              ${value}
+              </div>
+            </div>`;
+            target.style.color = open_advert_text_color;
+            target.setAttribute('class', type + '_text');
+        }
+        if(value){
+            document.getElementById('loadingImg').appendChild(target);
+            $('#bodyclass').show();
+        }
+    }
+
+    function startPano() {
+        $('#bodyclass').remove();
+        embedpano({swf: "other/pano.swf", xml: xml, target: "pano", html5: "prefer", mobilescale: 1.0, passQueryParameters: true, wmode: "opaque",webgl:"auto"});
+        krpano = document.getElementById("krpanoSWFObject");
+    }
+
+    var timeClock;
+    if (bodyclass == 'body-class') {
+        /*广告遮罩层*/
+        $('#loading').show();
+        if (bodyBackgroundColor) {
+            // $("body").css('background-color', bodyBackgroundColor);
+            $("#loading").css('background-color', bodyBackgroundColor);
+        }
+        if(advert_type != 2){
+            timeClock = setTimeout('startPano()', 0);
+        }
+
+    } else {
+        startPano();
+    }
+</script>
+
+<!--加载页面js-->
+<script type="text/javascript" src="other/layer/layer.js"></script>
+<script type="text/javascript" src="other/preview.js"></script>
+
+
+<script type="text/javascript" src="other/roll.js"></script>
+
+    <!--全景场景选择-->
+    <div class="tab-shuffling visibility no-show" id="tab-shuffling"></div>
+    <script type='text/html' id="template_lb">
+        <div class="lb" id="lb">
+            {{each jsonList val i }}
+            <div class="cont {{if i!=0 }}none{{/if}} vr-lb-groupid-{{val.id}} ">
+                <div class="swiper-container gallery-top gallery-top_{{val.id}}">
+                    <div class="swiper-wrapper" style="display: none;">
+                        {{each val.son val2 i}}
+                        <div class="swiper-slide">{{val2.name}}</div>
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="swiper-container gallery-thumbs gallery-thumbs_{{val.id}}">
+                    <div class="swiper-wrapper">
+                        {{each val.son val2 k}}
+                        <div class="swiper-slide vr-slide vr-pano2sceneid-{{val2.pano2sceneid}} {{if k==0 }} vr-groupid-{{val2.groupid}} {{/if}} {{if val2.hide==1}}none{{/if}}" data-index="{{k}}" data-pano2sceneid="{{val2.pano2sceneid}}" data-groupid="{{val2.groupid}}" title="{{val2.name}}">
+                            <div class="pic"><img id="pic-img-{{val.val2}}" src="{{val2.preview}}"></div>
+                            <div class="name2">
+                                <div id="container_small_tip{{val2.pano2sceneid}}" class="container_small_tip">
+                                    <div id="content_small_tip{{val2.pano2sceneid}}" class="content_small_tip">{{val2.name}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+
+        <div class="wrapper02 nav-tab none" id="nav-tab">
+        <div class="scroller">
+            <ul class="clearfix">
+                {{each jsonName val i}}
+                {{if i == 0}}
+                <li class="item  nav-tab-groupid-{{val.id}}" data-id="{{val.id}}" data-index="{{i}}"><a href="javascript:void(0)">{{val.name}}</a></li>
+                {{else/}}
+                <li class="item  nav-tab-groupid-{{val.id}}" data-id="{{val.id}}" data-index="{{i}}"><a href="javascript:void(0)">{{val.name}}</a></li>
+                {{/if}}
+                {{/each}}
+            </ul>
+        </div>
+        </div>
+    </script>
+
+    <script>
+        /*轮播图*/
+        json_List = {jsonName: [{"name":"\u9ed8\u8ba4","id":0}], jsonList: [{"id":0,"name":"\u9ed8\u8ba4","son":[{"name":"\u5c3a\u5bf8\u751f\u6210\u56fe\u7247.png","groupid":0,"sceneid":"133515496","pano2sceneid":"150971384","preview":"42-121630_6800809e66f5ecp.tiles\/thumb.jpg","hide":0,"compare_id":0}]}]};
+
+        function lbFun1(el, num, OffsetAfter) {
+            galleryThumbs = new Swiper('.gallery-thumbs_' + el, {
+                spaceBetween: 10,
+                slidesPerView: num,
+                freeMode: true,
+                watchSlidesVisibility: true,
+                watchSlidesProgress: true,
+                slidesOffsetAfter: OffsetAfter, /*最后一个偏移*/
+                centerInsufficientSlides: true, /*当slides的总数小于slidesPerView时，slides居中*/
+                on: {
+                    init: function () {
+                        if (el > 0) {
+                            $(".swiper-slide").removeClass('swiper-slide-active swiper-slide-thumb-active').children();
+                        }
+                    },
+                },
+            });
+            galleryTop = new Swiper('.gallery-top_' + el, {
+                spaceBetween: 10,
+                slidesOffsetAfter: 30,
+                centerInsufficientSlides: true,
+                thumbs: {
+                    swiper: galleryThumbs
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $(window).resize(function (event) {
+                reloadnum();
+            });
+
+            $(window).bind('orientationchange', function (e) {
+                $("#tab-shuffling").addClass('phone');
+                $(".phone .swiper-slide").css({
+                    "width": "65px !important",
+                    "height": "65px !important"
+                });
+                reloadnum();
+            });
+
+            var _w, _num;
+            if (vr_model_group != 0) {
+                $('#show_scenes').show();
+                /*数据*/
+                $(document).on('click', '.swiper-container .vr-slide', function () {
+                    let _SCENEID = $(this).attr('data-pano2sceneid');
+                    krpano.call("loadscene(scene_" + _SCENEID + ",null,MERGE,BLEND(0.8));");
+                    $(".swiper-slide").removeClass('swiper-slide-active swiper-slide-thumb-active');
+                    $('.vr-pano2sceneid-' + _SCENEID).addClass('swiper-slide-active swiper-slide-thumb-active');
+                    handerWordRoll(_SCENEID);
+                });
+                let html = template("template_lb", json_List);
+                let is_pic_true = IsPC();
+                $("#tab-shuffling").append(html);
+                // 默认第一个高亮滚动
+                handerWordRoll(json_List.jsonList[0].son[0].pano2sceneid)
+
+                function reloadnum() {
+                    if (is_pic_true) { /*如果是pc端访问*/
+                        $("#tab-shuffling").removeClass('phone');
+                        _w = $('body,html').width() - 140;
+                        _num = Math.ceil(_w / 110);
+                    } else { /*非pc端访问*/
+                        $("#tab-shuffling").addClass('phone');
+                        _w = $('body,html').width();
+                        _num = Math.ceil(_w / 75);
+                    }
+                    lbFun1(json_List.jsonList[0].id, _num, (json_List.jsonList[0].son.length * 15));
+                }
+                reloadnum();
+
+                $('#nav-tab').navbarscroll({
+                    defaultSelect: tag_index,
+                    scrollerWidth: 6,
+                    fingerClick: 1,
+                    endClickScroll: function (obj) {}
+                });
+
+                /*场景渲切换tab切换*/
+                $("#nav-tab .item").click(function () {
+                    let _index = $(this).index();
+                    $("#lb .cont").eq(_index).show().siblings().hide();
+                    lbFun1(json_List.jsonList[_index].id, _num, (json_List.jsonList[_index].son.length * 15));
+                    $(".swiper-slide").removeClass('swiper-slide-thumb-active swiper-slide-active');
+                    $(".vr-pano2sceneid-" + krpano.get("scene[get(xml.scene)].id")).addClass('swiper-slide-thumb-active swiper-slide-active');
+                });
+
+                /*场景 显示隐藏动画效果*/
+                $(document).on('click', '#show_scenes', function () {
+                    if ($('#tab-shuffling').hasClass('visibility')) {
+                        $('#tab-shuffling').removeClass('visibility');
+                        $(".tab-shuffling").css({transform: 'translateY(0px)'});
+                        $(".tab-shuffling").addClass('no-show');
+                    } else {
+                        let isTure = $("#tab-shuffling").hasClass('no-show');
+                        if (isTure) {
+                            $(".tab-shuffling").css({transform: 'translateY(300px)'});
+                            $(".tab-shuffling").removeClass('no-show');
+                        } else {
+                            $(".tab-shuffling").css({transform: 'translateY(0px)'});
+                            $(".tab-shuffling").addClass('no-show');
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+<script>
+    $(function () {
+        var countDownClearTime = null;
+        var _time = parseInt(0);
+        function countDownFn() {
+            if (countDownClearTime) {
+                return false;
+            }
+            countDownClearTime = setInterval(() => {
+                if (_time == 0) {
+                    clearInterval(countDownClearTime);
+                    _time = 0
+                } else {
+                    _time--;
+                }
+                $("#time").text(_time);
+            }, 1000)
+        }
+        if (_time > 0) {
+            countDownFn();
+        }
+        if (!IsPC()) {
+            if (open_advert_h5 != '') {
+                // $('#loadingImg img').attr('src', open_advert_h5).attr('style', 'max-width:100%;height: 100%');
+                $('#bodyclass').show();
+            }
+        } else {
+            if (open_advert_pc != '') {
+                // $('#loadingImg img').attr('src', open_advert_pc).attr('style', 'width:100%;max-height: 100%');
+                $('#bodyclass').show();
+            }
+        }
+    });
+</script>
+</body>
+</html>
