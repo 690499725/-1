@@ -8,7 +8,7 @@
           <p>基于物联网与人工智能的养老服务平台</p>
         </div>
         <div class="login-image">
-          <img src="../assets/login.png" alt="login background">
+          <img src="/image/login.png" alt="login background">
         </div>
       </div>
       <div class="login-right">
