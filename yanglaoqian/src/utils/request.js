@@ -3,7 +3,7 @@ import { ElMessage } from 'element-plus'
 import { getAiConfig } from '../assets/js/config.js'
 
 const service = axios.create({
-  baseURL: 'http://localhost:3001/api',
+  baseURL: 'https://jqaxeyyrpyjv.sealoshzh.site/api',
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json'
