@@ -228,7 +228,7 @@ const aiConfig = {
 		app_id: '7482639018904289334'
 	},
 	// Coze API密钥
-	api_key: 'pat_RHl1Cm4CjEumEEI5fHV8T5rrjerm39950v07wiWt15z6aKEXu99O66pP0DgNHiCp'
+	api_key: 'pat_lBQUZnOqafFRaDgpDQxCLoUPFTTUM0qRxO01NaKdGukymSTTR9ly6xEkpbosST74'
 }
 
 // 导出智能体配置
