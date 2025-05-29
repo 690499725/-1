@@ -423,10 +423,9 @@ button:hover,
   color: #fff !important;
 }
 
-/* 输入框、选择框等也设为黑色风格 */
+/* 选择框等也设为黑色风格 */
 .el-input__inner,
 .el-textarea__inner {
-  background: #222 !important;
   color: #fff !important;
   border-color: #444 !important;
 }
