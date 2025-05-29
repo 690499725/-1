@@ -396,3 +396,42 @@ button:hover,
   transform: translateY(20px);
   opacity: 0;
 }
+
+
+/* 覆盖 el-dialog 整体背景为黑色 */
+.el-dialog {
+  background: #000 !important;
+  color: #fff !important;
+}
+
+/* 覆盖标题栏背景和字体 */
+.el-dialog__header {
+  background: #000 !important;
+  color: #fff !important;
+  border-bottom: none !important;
+}
+
+/* 覆盖内容区背景和字体 */
+.el-dialog__body {
+  background: #000 !important;
+  color: #fff !important;
+}
+
+/* 覆盖底部按钮区背景和字体 */
+.el-dialog__footer {
+  background: #000 !important;
+  color: #fff !important;
+}
+
+/* 输入框、选择框等也设为黑色风格 */
+.el-input__inner,
+.el-textarea__inner {
+  background: #222 !important;
+  color: #fff !important;
+  border-color: #444 !important;
+}
+
+/* label 文字也变白 */
+.el-form-item__label {
+  color: #fff !important;
+}
