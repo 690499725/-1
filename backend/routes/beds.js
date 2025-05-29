@@ -3,8 +3,9 @@ const router = express.Router();
 const db = require('../config/database');
 const { isAdmin } = require('../middleware/auth');
 
+
 // 获取床位列表
-router.get('/', async (req, res) => {
+router.get('/',  async (req, res) => {
   try {
     const { page = 1, limit = 10, building, floor, room_number, status } = req.query;
     const offset = (page - 1) * limit;

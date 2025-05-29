@@ -6,8 +6,8 @@
   
   	<settingdialog v-if="settingshow" @saved="refreshConfig" @hideSetting="hideSetting"></settingdialog>
     
-    <!-- 添加智能助手组件 -->
-    <ai-assistant ref="aiAssistantRef"></ai-assistant>
+    <!-- 添加智能助手组件，只在非登录注册页面显示 -->
+    <ai-assistant v-if="showAiAssistant" ref="aiAssistantRef"></ai-assistant>
   </div>
 </template>
 
@@ -52,6 +52,11 @@
 	
 	// 是否显示菜单栏
 	const showMenu = computed(() => {
+		return route.path !== '/login' && route.path !== '/register'
+	})
+
+	// 是否显示AI助手
+	const showAiAssistant = computed(() => {
 		return route.path !== '/login' && route.path !== '/register'
 	})
 	

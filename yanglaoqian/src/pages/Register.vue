@@ -8,7 +8,7 @@
           <p>基于 VR +AI 的智慧养老院数字孪生平台：智能监控与健康管理一体化系</p>
         </div>
         <div class="register-image">
-          <img src="../assets/login.png" alt="register background">
+          <img src="/image/login.png" alt="register background">
         </div>
       </div>
       <div class="register-right">
@@ -167,15 +167,25 @@ const handleRegister = async () => {
         const { confirmPassword, ...data } = registerForm
         const res = await register(data)
         if (res.code === 201 || res.code === 200) {
-          ElMessage.success('注册成功')
+          ElMessage.success('注册成功，即将跳转到登录页面')
           // 使用 window.location.href 进行跳转
           window.location.href = '/#/login'
         } else {
-          ElMessage.error(res.message || '注册失败')
+          ElMessage.error(res.message || '注册失败，请检查输入信息')
         }
       } catch (error) {
         console.error('注册错误:', error)
-        ElMessage.error(error.response?.data?.message || '注册失败，请稍后重试')
+        if (error.response?.status === 400) {
+          ElMessage.error('输入信息有误，请检查后重试')
+        } else if (error.response?.status === 409) {
+          ElMessage.error('用户名已存在，请更换其他用户名')
+        } else if (error.response?.status === 403) {
+          ElMessage.error('注册功能暂时关闭，请联系管理员')
+        } else if (error.code === 'ECONNABORTED') {
+          ElMessage.error('网络连接超时，请检查网络后重试')
+        } else {
+          ElMessage.error('注册失败，请稍后重试')
+        }
       } finally {
         loading.value = false
       }

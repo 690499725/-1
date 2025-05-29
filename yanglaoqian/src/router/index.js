@@ -6,21 +6,18 @@ import Bed from '../pages/Bed.vue'
 import Health from '../pages/Health.vue'
 import Video from '../pages/Video.vue'
 import Members from '../pages/Members.vue'
-
-
+import { hasPermission, handlePermissionDenied } from '../utils/permission'
 
 const routes = [
   {
     path: '/login',
     name: 'Login',
-    // component: ()=> import("../pages/Login.vue"),
     component: Login,
     meta: { requiresAuth: false }
   },
   {
     path: '/register',
     name: 'Register',
-    // component:  ()=> import("../pages/Register.vue"),
     component: Register,
     meta: { requiresAuth: false }
   },
@@ -31,38 +28,32 @@ const routes = [
   {
     path: '/index',
     name: 'Index',
-    // component:  ()=> import("../pages/Index.vue"),
     component: Index,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, isPublic: true }
   },
   {
     path: '/bed',
     name: 'Bed',
     component: Bed,
-    // component: ()=> import("../pages/Bed.vue"),
-
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, permission: ["bed"] }
   },
   {
     path: '/members',
     name: 'Members',
-    // component:  ()=> import("../pages/Members.vue"),
     component: Members,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, permission: ["member"] }
   },
   {
     path: '/health',
     name: 'Health',
-    // component:  ()=> import("../pages/Health.vue"),
     component: Health,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, permission: ["health"] }
   },
   {
     path: '/video',
     name: 'Video',
-    // component:  ()=> import("../pages/Video.vue"),
     component: Video,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, permission: ["video"] }
   }
 ]
 
@@ -72,15 +63,38 @@ const router = createRouter({
 })
 
 // 路由守卫
-router.beforeEach((to, _, next) => {
+router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
+  
+  // 检查是否需要认证
   if (to.meta.requiresAuth && !token) {
-    next('/login')  // 如果需要认证但没有token，重定向到登录页
-  } else if ((to.path === '/login' || to.path === '/register') && token) {
-    next('/')       // 已登录用户试图访问登录/注册页，重定向到首页
-  } else {
-    next()          // 其他情况正常导航
+    next('/login')
+    return
   }
+  
+  // 已登录用户试图访问登录/注册页，重定向到首页
+  if ((to.path === '/login' || to.path === '/register') && token) {
+    next('/')
+    return
+  }
+  
+  // 检查权限
+  if (to.meta.requiresAuth && token) {
+    // 如果是公开页面，直接放行
+    if (to.meta.isPublic) {
+      next()
+      return
+    }
+    
+    // 检查是否有权限访问
+    if (to.meta.permission && !hasPermission(to.meta.permission)) {
+      handlePermissionDenied()
+      next(false)
+      return
+    }
+  }
+  
+  next()
 })
 
 export default router 

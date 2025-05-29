@@ -5,10 +5,10 @@
       <div class="login-left">
         <div class="welcome-text">
           <h1>乐龄慧护</h1>
-          <p>基于物联网与人工智能的养老服务平台</p>
+          <p>基于 VR +AI 的智慧养老院数字孪生平台：智能监控与健康管理一体化系</p>
         </div>
         <div class="login-image">
-          <img src="../assets/login.png" alt="login background">
+          <img src="/image/login.png" alt="login background">
         </div>
       </div>
       <div class="login-right">
@@ -110,27 +110,51 @@ const toggleDarkMode = () => {
 const handleLogin = async () => {
   if (!loginFormRef.value) return
   
-  await loginFormRef.value.validate(async (valid) => {
-    if (valid) {
-      loading.value = true
-      try {
-        const res = await login(loginForm)
-        if (res.code === 200) {
-          localStorage.setItem('token', res.data.token)
-          localStorage.setItem('userInfo', JSON.stringify(res.data.user))
-          userStore.setUserInfo(res.data.user)
-          ElMessage.success('登录成功')
-          router.push('/')
-        } else {
-          ElMessage.error(res.message || '登录失败')
-        }
-      } catch (error) {
-        ElMessage.error('登录失败，请稍后重试')
-      } finally {
-        loading.value = false
+  try {
+    await loginFormRef.value.validate()
+    loading.value = true
+    
+    const res = await login(loginForm)
+    console.log('登录响应:', res)
+    
+    if (res.code === 200) {
+      // 存储token
+      localStorage.setItem('token', res.data.token)
+      
+      // 存储用户信息，包括权限
+      const userInfo = {
+        id: res.data.user.id,
+        username: res.data.user.username,
+        role: res.data.user.role,
+        permissions: res.data.user.permissions || []
       }
+      console.log('存储用户信息:', userInfo)
+      localStorage.setItem('userInfo', JSON.stringify(userInfo))
+      
+      // 更新 Pinia store
+      userStore.setUserInfo(userInfo)
+      
+      ElMessage.success('登录成功，欢迎回来！')
+      router.push('/')
+    } else {
+      ElMessage.error(res.message || '登录失败，请检查用户名和密码')
     }
-  })
+  } catch (error) {
+    console.error('登录失败:', error)
+    if (error.response?.status === 401) {
+      ElMessage.error('用户名或密码错误，请重试')
+    } else if (error.response?.status === 403) {
+      ElMessage.error('账号已被禁用，请联系管理员')
+    } else if (error.response?.status === 404) {
+      ElMessage.error('服务器连接失败，请稍后重试')
+    } else if (error.code === 'ECONNABORTED') {
+      ElMessage.error('网络连接超时，请检查网络后重试')
+    } else {
+      ElMessage.error('登录失败，请稍后重试')
+    }
+  } finally {
+    loading.value = false
+  }
 }
 
 const goToRegister = () => {

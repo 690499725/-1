@@ -363,30 +363,32 @@
 	
 	//获取床位列表
 	const fetchBedList = async () => {
-		loading.value = true
 		try {
-			const params = {
+			loading.value = true
+			const response = await getBeds({
 				page: currentPage.value,
-				limit: pageSize.value,
-				...searchForm
-			}
-			const res = await getBeds(params)
-			bedList.value = res.data.beds
-			total.value = res.data.total
+				limit: pageSize.value
+			})
 			
-			// 获取完数据后立即更新图表
-			if (statistics.total > 0) {
-				// 获取所有床位数据用于图表展示
-				const allBedsRes = await getBeds({
-					...searchForm,
-					limit: total.value // 获取所有数据
-				})
-				if (allBedsRes.data && allBedsRes.data.beds) {
-					updateChartData(allBedsRes.data.beds)
-				}
+			if (response.code === 200) {
+				bedList.value = response.data.beds
+				total.value = response.data.total
+			} else {
+				ElMessage.error(response.message || '获取床位信息失败，请稍后重试')
 			}
 		} catch (error) {
-			console.error('获取床位列表失败:', error)
+			console.error('获取床位信息失败:', error)
+			if (error.response?.status === 401) {
+				ElMessage.error('登录已过期，请重新登录')
+			} else if (error.response?.status === 403) {
+				ElMessage.error('您没有查看床位信息的权限')
+			} else if (error.response?.status === 404) {
+				ElMessage.error('未找到相关床位信息')
+			} else if (error.code === 'ECONNABORTED') {
+				ElMessage.error('网络连接超时，请检查网络后重试')
+			} else {
+				ElMessage.error('获取床位信息失败，请稍后重试')
+			}
 		} finally {
 			loading.value = false
 		}

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/database');
 
+
 // 获取健康数据
 router.get('/monitor', async (req, res) => {
   try {

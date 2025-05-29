@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require('../config/database');
 const { isAdmin } = require('../middleware/auth');
 
+
 // 获取老人列表
 router.get('/', async (req, res) => {
   try {

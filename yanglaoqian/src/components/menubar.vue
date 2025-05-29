@@ -75,6 +75,12 @@
 		</div>
 	</div>
 
+	<!-- 设置对话框 -->
+	<SettingDialog ref="settingDialogRef" />
+
+	<!-- 用户设置对话框 -->
+	<UserSettingsDialog ref="userSettingsDialogRef" />
+
 	<!-- 将用户下拉菜单移到最外层，确保不被其他元素遮挡 -->
 	<teleport to="body">
 		<div v-if="showUserMenu" class="user-dropdown-menu-container" @click.stop>
@@ -104,9 +110,14 @@
 		computed
 	} from 'vue'
 	import {
-		useRoute
+		useRoute,
+		useRouter
 	} from 'vue-router'
 	import { ChatDotRound, FullScreen, Setting, User, SwitchButton } from '@element-plus/icons-vue'
+	import SettingDialog from './SettingDialog.vue'
+	import UserSettingsDialog from './UserSettingsDialog.vue'
+	import { ElMessage } from 'element-plus'
+	import { hasPermission } from '../utils/permission'
 	
 	import config from '../assets/js/config.js'
 	
@@ -153,8 +164,7 @@
 	const showUserSettings = () => {
 		showUserMenu.value = false
 		document.removeEventListener('click', closeUserMenuOnBlur)
-		// TODO: 显示用户设置对话框
-		console.log('打开用户设置')
+		userSettingsDialogRef.value.open()
 	}
 	
 	// 处理退出登录
@@ -193,35 +203,46 @@
 			name: '综合概览',
 			path: '/index',
 			checked: true,
+			permission: null // 公开页面
 		},
 		{
 			name: '床位监控',
 			path: '/bed',
 			checked: false,
+			permission: ['bed']
 		},
 		{
 			name: '老人管理',
 			path: '/members',
 			checked: false,
+			permission: ['member']
 		},
 		{
 			name: '健康监控',
 			path: '/health',
 			checked: false,
+			permission: ['health']
 		},
 		{
 			name: '安防监控',
 			path: '/video',
 			checked: false,
+			permission: ['video']
 		}
 	])
 	
 	// 切换选中菜单
 	const menuChanged = (item) => {
+		// 检查权限
+		if (item.permission && !hasPermission(item.permission)) {
+			ElMessage.error('您没有访问该页面的权限')
+			return
+		}
+		
 		menus.value.forEach((menu) => {
 			menu.checked = (menu.name === item.name)
 		})
-		window.location.href = "/#" + item.path
+		router.push(item.path)
 	}
 	
 	// 全屏功能
@@ -252,9 +273,14 @@
 		}
 	}
 	
+	// 设置对话框引用
+	const settingDialogRef = ref(null)
+	// 用户设置对话框引用
+	const userSettingsDialogRef = ref(null)
+	
 	// 打开设置
 	const showSettingDialog = () => {
-		emits('showSettingDialog')
+		settingDialogRef.value.open()
 	}
 	
 	// 设置系统时间
@@ -284,6 +310,7 @@
 	
 	// 获取当前路由
 	const route = useRoute()
+	const router = useRouter()
 	
 	// 根据当前路由更新选中菜单
 	watch(() => route.path, (newPath) => {

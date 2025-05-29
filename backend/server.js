@@ -66,6 +66,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/beds', require('./routes/beds'));
 app.use('/api/members', require('./routes/members'));
 app.use('/api/health', require('./routes/health'));
+app.use('/api/root', require('./routes/root'));
 
 // 错误处理中间件
 app.use((err, req, res, next) => {

@@ -154,51 +154,7 @@ export default {
 			}
 		]
 	},
-	defaultconfig: [{
-		key: 'theme',
-		value: 'dark',
-		label: '界面主题',
-		type: 'select',
-		required: true,
-		options: [{
-			value: 'dark',
-			label: '深色主题'
-		}, {
-			value: 'red',
-			label: '紅色主题'
-		}]
-	}, {
-		key: 'refreshtime',
-		value: 10 * 1000,
-		label: '刷新时间',
-		type: 'number',
-		required: true
-	}, {
-		key: 'turntime',
-		value: 20 * 1000,
-		label: '切换时间',
-		type: 'select',
-		required: true,
-		options: [{
-			value: 20 * 1000,
-			label: '20秒'
-		}, {
-			value: 60 * 1000,
-			label: '1分钟'
-		}, {
-			value: 2 * 60 * 1000,
-			label: '2分钟'
-		}, {
-			value: 5 * 60 * 1000,
-			label: '5分钟'
-		}]
-	}, {
-		key: 'serverurl',
-		value: '/',
-		label: '接口地址',
-		type: 'text',
-		required: true
-	}],
+	
 	/**
 	 * 获取系统配置
 	 */
@@ -214,6 +170,8 @@ export default {
 }
 
 // 添加Coze智能体配置
+const savedConfig = JSON.parse(localStorage.getItem('apiConfig') || '{}')
+
 const aiConfig = {
 	// 天气预报智能体（恢复使用V1 API格式）
 	weather: {
@@ -228,7 +186,7 @@ const aiConfig = {
 		app_id: '7482639018904289334'
 	},
 	// Coze API密钥
-	api_key: 'pat_RHl1Cm4CjEumEEI5fHV8T5rrjerm39950v07wiWt15z6aKEXu99O66pP0DgNHiCp'
+	api_key: savedConfig.apiKey || 'pat_lBQUZnOqafFRaDgpDQxCLoUPFTTUM0qRxO01NaKdGukymSTTR9ly6xEkpbosST74'
 }
 
 // 导出智能体配置

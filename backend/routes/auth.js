@@ -49,7 +49,6 @@ router.post('/register', async (req, res) => {
     });
   }
 });
-
 // 登录
 router.post('/login', async (req, res) => {
   try {
@@ -95,12 +94,13 @@ router.post('/login', async (req, res) => {
           id: user.id,
           username: user.username,
           name: user.name,
-          role: user.role
+          role: user.role,
+          permissions: user.permissions ? JSON.parse(user.permissions) : []
         }
       }
     });
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     res.status(500).json({
       code: 500,
       message: '服务器内部错误'
