@@ -132,12 +132,13 @@ html, body {
 #app {
   height: 100vh;
   overflow-y: auto;
-  background-color: #141414;
+  background-color: #000000;
 }
 
 .container {
 	width: 100%;
 	height: 100vh;
 	overflow: hidden;
+	background-color: #000000;
 }
 </style>
