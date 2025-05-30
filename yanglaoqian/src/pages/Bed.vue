@@ -365,6 +365,7 @@
 	const fetchBedList = async () => {
 		try {
 			loading.value = true
+			// 获取分页数据
 			const response = await getBeds({
 				page: currentPage.value,
 				limit: pageSize.value
@@ -393,15 +394,32 @@
 			loading.value = false
 		}
 	}
-	
+
+	// 获取所有床位数据（用于图表展示）
+	const fetchAllBeds = async () => {
+		try {
+			const response = await getBeds({
+				page: 1,
+				limit: 9999  // 设置一个足够大的数字以获取所有数据
+			})
+			
+			if (response.code === 200) {
+				// 更新图表数据
+				updateChartData(response.data.beds)
+			}
+		} catch (error) {
+			console.error('获取所有床位数据失败:', error)
+		}
+	}
+
 	//获取统计信息
 	const fetchStatistics = async () => {
 		try {
 			const res = await getBedStatistics()
 			Object.assign(statistics, res.data)
 			
-			// 获取完统计信息后更新图表
-			updateChartData()
+			// 获取所有床位数据用于更新图表
+			await fetchAllBeds()
 		} catch (error) {
 			console.error('获取统计信息失败:', error)
 		}
@@ -616,6 +634,10 @@
 		return texts[status] || status
 	}
 	
+	// 图表引用
+	const bedUsageChart = ref(null)
+	const bedDistributionChart = ref(null)
+
 	// 床位使用率图表配置
 	const bedUsageOption = reactive({
 		tooltip: {
@@ -845,31 +867,50 @@
 	
 	// 更新图表数据
 	const updateChartData = (allBeds) => {
+		if (!allBeds || !Array.isArray(allBeds)) {
+			console.warn('无效的床位数据')
+			return
+		}
+
 		// 更新床位使用率图表
-		bedUsageOption.series[0].data[0].value = statistics.occupied;
-		bedUsageOption.series[0].data[1].value = statistics.available;
-		bedUsageOption.series[0].data[2].value = statistics.maintenance;
+		bedUsageOption.series[0].data[0].value = statistics.occupied
+		bedUsageOption.series[0].data[1].value = statistics.available
+		bedUsageOption.series[0].data[2].value = statistics.maintenance
 		
-		// 获取楼宇分布数据
-		const buildings = Array.from(new Set(allBeds.map(bed => bed.building)));
-		bedDistributionOption.xAxis.data = buildings;
+		// 获取所有楼宇并排序
+		const buildings = Array.from(new Set(allBeds.map(bed => bed.building)))
+			.filter(Boolean)
+			.sort((a, b) => a.localeCompare(b, 'zh-CN'))
+		
+		bedDistributionOption.xAxis.data = buildings
 		
 		// 按楼宇统计床位状态
-		const occupiedByBuilding = [];
-		const availableByBuilding = [];
-		const maintenanceByBuilding = [];
+		const occupiedByBuilding = []
+		const availableByBuilding = []
+		const maintenanceByBuilding = []
 		
 		buildings.forEach(building => {
-			const bedsInBuilding = allBeds.filter(bed => bed.building === building);
-			occupiedByBuilding.push(bedsInBuilding.filter(bed => bed.status === 'occupied').length);
-			availableByBuilding.push(bedsInBuilding.filter(bed => bed.status === 'available').length);
-			maintenanceByBuilding.push(bedsInBuilding.filter(bed => bed.status === 'maintenance').length);
-		});
+			const bedsInBuilding = allBeds.filter(bed => bed.building === building)
+			occupiedByBuilding.push(bedsInBuilding.filter(bed => bed.status === 'occupied').length)
+			availableByBuilding.push(bedsInBuilding.filter(bed => bed.status === 'available').length)
+			maintenanceByBuilding.push(bedsInBuilding.filter(bed => bed.status === 'maintenance').length)
+		})
 		
-		bedDistributionOption.series[0].data = occupiedByBuilding;
-		bedDistributionOption.series[1].data = availableByBuilding;
-		bedDistributionOption.series[2].data = maintenanceByBuilding;
-	};
+		// 更新图表数据
+		bedDistributionOption.series[0].data = occupiedByBuilding
+		bedDistributionOption.series[1].data = availableByBuilding
+		bedDistributionOption.series[2].data = maintenanceByBuilding
+
+		// 强制更新图表
+		if (bedDistributionChart.value) {
+			bedDistributionChart.value.setOption(bedDistributionOption)
+		}
+		
+		// 更新使用率图表
+		if (bedUsageChart.value) {
+			bedUsageChart.value.setOption(bedUsageOption)
+		}
+	}
 	
 	//初始化
 	onMounted(() => {
